@@ -1,0 +1,49 @@
+tier_a:  # True AI/ML/search/ranking roles — score 1.0
+  - "ml engineer"
+  - "machine learning engineer"
+  - "ai engineer"
+  - "nlp engineer"
+  - "applied scientist"
+  - "applied ml engineer"
+  - "search engineer"
+  - "recommendation systems engineer"
+  - "ranking engineer"
+  - "information retrieval engineer"
+  - "research scientist"
+
+tier_b:  # Adjacent technical roles — score 0.65, could still be a fit
+  - "data scientist"
+  - "research engineer"
+  - "computer vision engineer"
+  - "software engineer"
+  - "backend engineer"
+  - "full stack developer"
+  - ".net developer"
+  - "java developer"
+  - "mobile developer"
+  - "frontend engineer"
+  - "cloud engineer"
+  - "devops engineer"
+  - "qa engineer"
+
+tier_c:  # Loosely technical, unlikely but not impossible — score 0.35
+  - "data engineer"
+  - "business analyst"
+  - "project manager"
+
+tier_d:  # Explicitly wrong domain per JD — score 0.05
+  - "hr manager"
+  - "marketing manager"
+  - "graphic designer"
+  - "accountant"
+  - "civil engineer"
+  - "mechanical engineer"
+  - "operations manager"
+  - "customer support"
+
+scores:
+  tier_a: 1.0
+  tier_b: 0.65
+  tier_c: 0.35
+  tier_d: 0.05
+  unknown: 0.30   # title doesn't match any list — neutral, slightly cautious
