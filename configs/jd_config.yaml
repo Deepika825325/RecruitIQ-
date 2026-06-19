@@ -81,6 +81,7 @@ core_skills:
     - "map"
     - "information retrieval"
     - "a/b testing"
+    - "bm25"
   core_language:
     - "python"
 
@@ -90,3 +91,6 @@ penalty_domains:
   - "robotics"
   - "image classification"
   - "object detection"
+  - "opencv"
+  - "cnn"
+  - "gan"

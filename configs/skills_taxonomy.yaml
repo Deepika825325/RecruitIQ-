@@ -1,0 +1,19 @@
+bonus_skills:
+  # JD-stated nice-to-haves
+  - "lora"
+  - "qlora"
+  - "peft"
+  - "learning to rank"
+  - "xgboost"
+  - "lightgbm"
+  - "langchain"
+  # General production ML competence signals
+  - "pytorch"
+  - "tensorflow"
+  - "mlflow"
+  - "mlops"
+  - "hugging face transformers"
+  - "kubeflow"
+  - "bentoml"
+  - "feature engineering"
+  - "scikit-learn"
