@@ -1,0 +1,92 @@
+role:
+  title: "Senior AI Engineer — Founding Team"
+  company: "Redrob AI"
+  stage: "Series A"
+  employment_type: "full-time"
+
+experience:
+  ideal_min_years: 5
+  ideal_max_years: 9
+  note: "Range not a hard requirement — strong signals can compensate outside this band"
+
+must_haves:
+  - "production experience with embedding-based retrieval (sentence-transformers, OpenAI embeddings, BGE, E5)"
+  - "production experience with vector DB / hybrid search (Pinecone, Weaviate, Qdrant, Milvus, OpenSearch, Elasticsearch, FAISS)"
+  - "strong Python"
+  - "hands-on evaluation framework experience (NDCG, MRR, MAP, A/B testing)"
+
+nice_to_haves:
+  - "LoRA/QLoRA/PEFT fine-tuning"
+  - "learning-to-rank models (XGBoost-based or neural)"
+  - "HR-tech / recruiting-tech / marketplace background"
+  - "distributed systems / large-scale inference"
+  - "open-source AI/ML contributions"
+
+disqualifiers:
+  pure_research_no_production: true
+  recent_only_langchain_wrapper_under_12mo: true
+  senior_no_code_18mo: true          # moved to pure architecture/tech-lead, hasn't coded in 18mo
+  title_chaser: true                  # Senior->Staff->Principal via company-hop every ~1.5yrs
+  framework_enthusiast_only: true     # LangChain tutorials, no systems thinking
+  consulting_only_career: true        # TCS/Infosys/Wipro/Accenture/Cognizant/Capgemini, NO prior product co
+  cv_speech_robotics_no_nlp: true     # CV/speech/robotics specialist, no NLP/IR exposure
+  closed_source_5yr_no_external_validation: true
+
+consulting_firms:
+  - "TCS"
+  - "Infosys"
+  - "Wipro"
+  - "Accenture"
+  - "Cognizant"
+  - "Capgemini"
+  - "Tech Mahindra"
+  - "HCL"
+  - "Mindtree"
+
+location:
+  preferred_cities: ["Pune", "Noida"]
+  welcome_cities: ["Hyderabad", "Mumbai", "Delhi NCR"]
+  country_preference: "India"
+  visa_sponsorship: false
+
+notice_period:
+  ideal_max_days: 30
+  acceptable_max_days: 60
+  note: "30+ days still in scope but bar gets higher"
+
+ideal_candidate_profile:
+  total_experience_years: "6-8"
+  applied_ml_years_at_product_companies: "4-5"
+  key_signal: "shipped at least one end-to-end ranking/search/recommendation system to real users at meaningful scale"
+  must_be: "active on platform or clearly job-market-active"
+
+core_skills:
+  embeddings_retrieval:
+    - "sentence transformers"
+    - "openai embeddings"
+    - "bge"
+    - "e5"
+    - "embeddings"
+  vector_db_search:
+    - "pinecone"
+    - "weaviate"
+    - "qdrant"
+    - "milvus"
+    - "opensearch"
+    - "elasticsearch"
+    - "faiss"
+  eval_frameworks:
+    - "ndcg"
+    - "mrr"
+    - "map"
+    - "information retrieval"
+    - "a/b testing"
+  core_language:
+    - "python"
+
+penalty_domains:
+  - "computer vision"
+  - "speech recognition"
+  - "robotics"
+  - "image classification"
+  - "object detection"

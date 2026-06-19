@@ -1,0 +1,31 @@
+# ── Core data processing ──────────────────────────────
+pandas==3.0.3
+numpy==2.4.6
+
+# ── Semantic scoring ───────────────────────────────────
+scikit-learn==1.9.0
+sentence-transformers==5.6.0
+torch==2.12.1
+
+# ── Fuzzy matching for titles/companies ───────────────
+rapidfuzz==3.14.5
+
+# ── Config and CLI ─────────────────────────────────────
+pyyaml==6.0.3
+tqdm==4.68.3
+
+# ── Dashboard ──────────────────────────────────────────
+streamlit==1.58.0
+plotly==6.8.0
+altair==6.2.1
+
+# ── Dev tools ──────────────────────────────────────────
+jupyter==1.1.1
+pytest==9.1.0
+black==26.5.1
+ruff==0.15.18
+
+# ── Build & Environment Fixes ─────────────────────────
+ninja==1.13.0
+setuptools==81.0.0
+wheel==0.47.0
