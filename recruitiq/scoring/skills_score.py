@@ -133,3 +133,6 @@ if __name__ == "__main__":
     print("Strong fit score:", skills_score(strong_fit))
     print("Reject score:    ", skills_score(reject))
     print("Honeypot score:  ", skills_score(honeypot))
+    
+def classify_skill(skill_name: str) -> str | None:
+    return _classify_skill(skill_name)
