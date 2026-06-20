@@ -94,3 +94,17 @@ penalty_domains:
   - "opencv"
   - "cnn"
   - "gan"
+jd_full_text: |
+  Own the intelligence layer of the product: the ranking, retrieval, and
+  matching systems that decide what users see when they search. Audit and
+  improve an existing BM25 and rule-based scoring system, then ship a new
+  ranking system using embeddings, hybrid retrieval, and possibly LLM-based
+  re-ranking that improves real user engagement metrics. Build evaluation
+  infrastructure including offline benchmarks and online A/B testing.
+  The ideal candidate has shipped at least one end-to-end ranking, search,
+  or recommendation system to real users at meaningful scale, has handled
+  embedding drift, index refresh, and retrieval-quality regression in
+  production, has operational experience with vector databases or hybrid
+  search infrastructure, and has hands-on experience designing evaluation
+  frameworks for ranking systems including NDCG, MRR, MAP, and offline-to-
+  online correlation.

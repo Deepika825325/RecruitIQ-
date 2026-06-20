@@ -32,3 +32,6 @@ Desktop.ini
 
 # ── Documentation & Presentation (Keep source only) ──
 docs/ARCHITECTURE_DIAGRAM.PNG
+
+data/processed/
+*.npy
