@@ -29,3 +29,4 @@ ruff==0.15.18
 ninja==1.13.0
 setuptools==81.0.0
 wheel==0.47.0
+lightgbm==4.6.0
