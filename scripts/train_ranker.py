@@ -1,5 +1,6 @@
 ﻿import sys
 import csv
+import json
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -9,6 +10,7 @@ import lightgbm as lgb
 
 LABELED_PATH = "data/processed/labeling_sample.csv"
 MODEL_OUTPUT_PATH = "data/processed/ranker_model.txt"
+IMPORTANCE_OUTPUT_PATH = "data/processed/feature_importance.json"
 FEATURE_COLUMNS = ["title_score", "skills_score", "career_score", "structured_score"]
 
 
@@ -53,12 +55,22 @@ def main():
 
     importances = model.feature_importance(importance_type="gain")
     total = sum(importances)
+
+    importance_dict = {}
     print("Feature importances (gain):")
     for name, imp in zip(FEATURE_COLUMNS, importances):
         pct = (imp / total * 100) if total > 0 else 0
+        importance_dict[name] = round(float(pct), 2)
         print(f"  {name}: {imp:.1f} ({pct:.1f}%)")
 
+    with open(IMPORTANCE_OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump({
+            "feature_importance_pct": importance_dict,
+            "trained_on_count": len(rows),
+        }, f, indent=2)
+
     print(f"Model saved to {MODEL_OUTPUT_PATH}")
+    print(f"Feature importance saved to {IMPORTANCE_OUTPUT_PATH}")
     print(f"Trained on {len(rows)} labeled candidates")
 
 

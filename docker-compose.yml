@@ -1,0 +1,22 @@
+﻿version: "3.9"
+
+services:
+  ranker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./data/raw:/data/raw:ro
+      - ./data/outputs:/data/outputs
+      - ./data/processed:/app/data/processed:ro
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: dashboard/Dockerfile
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./data/outputs:/app/data/outputs:ro
+      - ./data/processed:/app/data/processed:ro
+      - ./configs:/app/configs:ro

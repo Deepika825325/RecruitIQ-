@@ -1,5 +1,6 @@
 ﻿import sys
 import csv
+import json
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
@@ -10,6 +11,7 @@ from recruitiq.filters.hard_filters import is_consulting_only, load_jd_config
 
 SUBMISSION_PATH = "data/outputs/submission.csv"
 CANDIDATES_PATH = "data/raw/candidates.jsonl"
+OUTPUT_PATH = "data/processed/honeypot_audit.json"
 
 
 def main():
@@ -39,25 +41,35 @@ def main():
 
         if is_hp:
             honeypot_count += 1
-            flagged.append((cid, "honeypot", reasons))
+            flagged.append({"candidate_id": cid, "type": "honeypot", "reasons": reasons})
         if is_consulting:
             consulting_count += 1
-            flagged.append((cid, "consulting_only", []))
+            flagged.append({"candidate_id": cid, "type": "consulting_only", "reasons": []})
 
     total = len(submitted_ids)
     honeypot_rate = honeypot_count / total * 100 if total else 0
+    status = "FAIL" if honeypot_rate > 10 else "PASS"
 
     print(f"Total submitted candidates: {total}")
     print(f"Honeypots detected: {honeypot_count} ({honeypot_rate:.2f}%)")
     print(f"Consulting-only detected: {consulting_count}")
-    print(f"Disqualification threshold: 10%")
-    print(f"Status: {'FAIL - DISQUALIFICATION RISK' if honeypot_rate > 10 else 'PASS'}")
+    print(f"Status: {status}")
 
-    if flagged:
-        print()
-        print("Flagged candidates:")
-        for cid, reason_type, reasons in flagged:
-            print(f"  {cid} [{reason_type}] {reasons}")
+    result = {
+        "total": total,
+        "honeypot_count": honeypot_count,
+        "honeypot_rate": round(honeypot_rate, 2),
+        "consulting_count": consulting_count,
+        "threshold": 10,
+        "status": status,
+        "flagged": flagged,
+    }
+
+    Path(OUTPUT_PATH).parent.mkdir(parents=True, exist_ok=True)
+    with open(OUTPUT_PATH, "w", encoding="utf-8") as f:
+        json.dump(result, f, indent=2)
+
+    print(f"Audit result saved to {OUTPUT_PATH}")
 
 
 if __name__ == "__main__":
