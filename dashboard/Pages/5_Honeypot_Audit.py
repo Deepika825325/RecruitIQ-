@@ -8,9 +8,11 @@ if str(PROJECT_ROOT) not in sys.path:
 import json
 import pandas as pd
 import streamlit as st
+from dashboard.components.styles import apply_custom_style, page_header
 
 st.set_page_config(page_title="Honeypot Audit", layout="wide")
-st.title("Honeypot and Disqualification Audit")
+apply_custom_style()
+page_header("Honeypot and Disqualification Audit", "Verifying the shortlist is free of trap candidates")
 
 AUDIT_PATH = PROJECT_ROOT / "data" / "processed" / "honeypot_audit.json"
 
@@ -33,7 +35,7 @@ else:
 
     if audit["flagged"]:
         st.markdown("---")
-        st.subheader("Flagged Candidates")
+        st.markdown("### Flagged Candidates")
         st.dataframe(pd.DataFrame(audit["flagged"]), use_container_width=True)
     else:
         st.markdown("---")

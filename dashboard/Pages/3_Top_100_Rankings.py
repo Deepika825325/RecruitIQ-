@@ -8,9 +8,11 @@ if str(PROJECT_ROOT) not in sys.path:
 import json
 import pandas as pd
 import streamlit as st
+from dashboard.components.styles import apply_custom_style, page_header, candidate_card
 
 st.set_page_config(page_title="Top 100 Rankings", layout="wide")
-st.title("Top 100 Ranked Candidates")
+apply_custom_style()
+page_header("Top 100 Ranked Candidates", "Filterable, sortable shortlist with reasoning")
 
 DETAILED_PATH = PROJECT_ROOT / "data" / "outputs" / "submission_detailed.json"
 
@@ -26,7 +28,12 @@ else:
     with col1:
         search = st.text_input("Search by title or company")
     with col2:
-        min_score = st.slider("Minimum score", float(df["score"].min()), float(df["score"].max()), float(df["score"].min()))
+        min_score = st.slider(
+            "Minimum score",
+            float(df["score"].min()),
+            float(df["score"].max()),
+            float(df["score"].min()),
+        )
 
     filtered = df[df["score"] >= min_score]
     if search:
@@ -36,13 +43,19 @@ else:
         )
         filtered = filtered[mask]
 
+    st.markdown("### Top 10 Spotlight")
+    for row in filtered.head(10).to_dict("records"):
+        candidate_card(row["rank"], row["candidate_id"], row["score"], row["reasoning"])
+
+    st.markdown("---")
+    st.markdown("### Full Filtered List")
     st.dataframe(
         filtered[
             ["rank", "candidate_id", "score", "current_title", "current_company",
              "years_of_experience", "location", "reasoning"]
         ],
         use_container_width=True,
-        height=600,
+        height=500,
     )
 
     st.caption(f"Showing {len(filtered)} of {len(df)} candidates")

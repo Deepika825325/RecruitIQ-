@@ -8,9 +8,11 @@ if str(PROJECT_ROOT) not in sys.path:
 import json
 import streamlit as st
 import plotly.graph_objects as go
+from dashboard.components.styles import apply_custom_style, page_header
 
 st.set_page_config(page_title="Score Explainability", layout="wide")
-st.title("Score Explainability")
+apply_custom_style()
+page_header("Score Explainability", "Per-candidate breakdown across all scoring layers")
 
 DETAILED_PATH = PROJECT_ROOT / "data" / "outputs" / "submission_detailed.json"
 IMPORTANCE_PATH = PROJECT_ROOT / "data" / "processed" / "feature_importance.json"
@@ -48,12 +50,24 @@ else:
         ]
 
         fig = go.Figure()
-        fig.add_trace(go.Scatterpolar(r=values + [values[0]], theta=categories + [categories[0]], fill="toself"))
-        fig.update_layout(polar=dict(radialaxis=dict(visible=True, range=[0, 1])), showlegend=False, height=400)
+        fig.add_trace(go.Scatterpolar(
+            r=values + [values[0]],
+            theta=categories + [categories[0]],
+            fill="toself",
+            line={"color": "#8B5CF6"},
+            fillcolor="rgba(139, 92, 246, 0.3)",
+        ))
+        fig.update_layout(
+            polar={"radialaxis": {"visible": True, "range": [0, 1]}},
+            showlegend=False,
+            height=400,
+            paper_bgcolor="rgba(0,0,0,0)",
+            font={"color": "#E2E8F0"},
+        )
         st.plotly_chart(fig, use_container_width=True)
 
     st.markdown("---")
-    st.subheader("Model Feature Importance")
+    st.markdown("### Model Feature Importance")
     if IMPORTANCE_PATH.exists():
         with open(IMPORTANCE_PATH, "r", encoding="utf-8") as f:
             importance = json.load(f)
@@ -61,8 +75,17 @@ else:
         names = list(importance["feature_importance_pct"].keys())
         pcts = list(importance["feature_importance_pct"].values())
 
-        fig2 = go.Figure(go.Bar(x=pcts, y=names, orientation="h"))
-        fig2.update_layout(height=300, xaxis_title="Gain percent")
+        fig2 = go.Figure(go.Bar(
+            x=pcts, y=names, orientation="h",
+            marker={"color": "#6366F1"},
+        ))
+        fig2.update_layout(
+            height=300,
+            xaxis_title="Gain percent",
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
+            font={"color": "#E2E8F0"},
+        )
         st.plotly_chart(fig2, use_container_width=True)
         st.caption(f"Trained on {importance['trained_on_count']} hand-labeled candidates using LightGBM lambdarank")
     else:

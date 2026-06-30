@@ -8,9 +8,11 @@ if str(PROJECT_ROOT) not in sys.path:
 import json
 import streamlit as st
 import plotly.graph_objects as go
+from dashboard.components.styles import apply_custom_style, page_header
 
 st.set_page_config(page_title="Funnel View", layout="wide")
-st.title("Candidate Funnel")
+apply_custom_style()
+page_header("Candidate Funnel", "How 100,000 candidates narrow down to the final shortlist")
 
 FUNNEL_PATH = PROJECT_ROOT / "data" / "outputs" / "funnel_stats.json"
 
@@ -24,8 +26,14 @@ else:
         y=["Total Candidates", "Stage A Survivors", "Final Shortlist"],
         x=[funnel["total_candidates"], funnel["stage_a_survivors"], funnel["final_shortlist"]],
         textinfo="value+percent initial",
+        marker={"color": ["#6366F1", "#8B5CF6", "#C084FC"]},
     ))
-    fig.update_layout(height=500)
+    fig.update_layout(
+        height=500,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
+        font={"color": "#E2E8F0"},
+    )
     st.plotly_chart(fig, use_container_width=True)
 
     col1, col2, col3 = st.columns(3)

@@ -7,9 +7,11 @@ if str(PROJECT_ROOT) not in sys.path:
 
 import yaml
 import streamlit as st
+from dashboard.components.styles import apply_custom_style, page_header
 
 st.set_page_config(page_title="JD Breakdown", layout="wide")
-st.title("Job Description Breakdown")
+apply_custom_style()
+page_header("Job Description Breakdown", "What the role actually requires, beyond keywords")
 
 JD_CONFIG_PATH = PROJECT_ROOT / "configs" / "jd_config.yaml"
 
