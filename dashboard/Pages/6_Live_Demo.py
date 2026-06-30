@@ -14,9 +14,11 @@ from recruitiq.pipeline import passes_stage_a, score_survivors, rank_top_n, load
 from recruitiq.scoring.career_score import EmbeddingsLookup
 from recruitiq.reasoning.generator import generate_reasoning
 
+from dashboard.components.styles import apply_custom_style, page_header
+
 st.set_page_config(page_title="Live Demo", layout="wide")
-st.title("Live Demo")
-st.caption("Runs the actual RecruitIQ pipeline live on a small candidate sample")
+apply_custom_style()
+page_header("Live Demo", "Runs the actual RecruitIQ pipeline live on a small candidate sample")
 
 SAMPLE_PATH = PROJECT_ROOT / "sample_data" / "sandbox_sample.json"
 JD_CONFIG_PATH = PROJECT_ROOT / "configs" / "jd_config.yaml"
