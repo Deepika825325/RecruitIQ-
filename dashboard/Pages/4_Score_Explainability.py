@@ -2,13 +2,16 @@
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DASHBOARD_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+if str(DASHBOARD_ROOT) not in sys.path:
+    sys.path.insert(0, str(DASHBOARD_ROOT))
 
 import json
 import streamlit as st
 import plotly.graph_objects as go
-from dashboard.components.styles import apply_custom_style, page_header
+from components.styles import apply_custom_style, page_header, section_header
 
 st.set_page_config(page_title="Score Explainability", layout="wide")
 apply_custom_style()
@@ -23,52 +26,57 @@ else:
     with open(DETAILED_PATH, "r", encoding="utf-8") as f:
         data = json.load(f)
 
-    options = [f"{d['rank']} - {d['candidate_id']} ({d['current_title']})" for d in data]
-    selected = st.selectbox("Select a candidate", options)
+    options = [f"Rank {d['rank']} - {d['candidate_id']} ({d['current_title']})" for d in data]
+    selected = st.selectbox("Select a candidate to inspect", options)
     selected_index = options.index(selected)
-    candidate = data[selected_index]
+    c = data[selected_index]
 
+    st.markdown("---")
     col1, col2 = st.columns([1, 1])
 
     with col1:
-        st.subheader(candidate["candidate_id"])
-        st.markdown(f"Title: {candidate['current_title']}")
-        st.markdown(f"Company: {candidate['current_company']}")
-        st.markdown(f"Experience: {candidate['years_of_experience']} years")
-        st.markdown(f"Location: {candidate['location']}")
-        st.markdown(f"Final Score: {candidate['score']}")
-        st.markdown(f"Behavioral Multiplier: {candidate['behavioral_multiplier']}")
-        st.info(candidate["reasoning"])
+        section_header("Candidate Details")
+        st.markdown(f"**ID:** {c['candidate_id']}")
+        st.markdown(f"**Title:** {c['current_title']}")
+        st.markdown(f"**Company:** {c['current_company']}")
+        st.markdown(f"**Experience:** {c['years_of_experience']} years")
+        st.markdown(f"**Location:** {c['location']}")
+        st.markdown(f"**Final Score:** {c['score']}")
+        st.markdown(f"**Behavioral Multiplier:** {c['behavioral_multiplier']}")
+        st.markdown("---")
+        section_header("Reasoning")
+        st.info(c["reasoning"])
 
     with col2:
+        section_header("Score Radar")
         categories = ["Title", "Skills", "Career", "Structured"]
-        values = [
-            candidate["title_score"],
-            candidate["skills_score"],
-            candidate["career_score"],
-            candidate["structured_score"],
-        ]
+        values = [c["title_score"], c["skills_score"], c["career_score"], c["structured_score"]]
 
         fig = go.Figure()
         fig.add_trace(go.Scatterpolar(
             r=values + [values[0]],
             theta=categories + [categories[0]],
             fill="toself",
-            line={"color": "#8B5CF6"},
-            fillcolor="rgba(139, 92, 246, 0.3)",
+            name="Score",
+            fillcolor="rgba(129,140,248,0.25)",
         ))
         fig.update_layout(
-            polar={"radialaxis": {"visible": True, "range": [0, 1]}},
+            polar={
+                "radialaxis": {"visible": True, "range": [0, 1], "color": "#475569"},
+                "bgcolor": "rgba(0,0,0,0)",
+                "angularaxis": {"color": "#475569"},
+            },
             showlegend=False,
             height=400,
             paper_bgcolor="rgba(0,0,0,0)",
-            font={"color": "#E2E8F0"},
+            font={"color": "#CBD5E1"},
+            margin={"t": 30, "b": 30, "l": 50, "r": 50},
         )
         st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown("---")
-    st.markdown("### Model Feature Importance")
     if IMPORTANCE_PATH.exists():
+        st.markdown("---")
+        section_header("LightGBM Feature Importance")
         with open(IMPORTANCE_PATH, "r", encoding="utf-8") as f:
             importance = json.load(f)
 
@@ -77,16 +85,19 @@ else:
 
         fig2 = go.Figure(go.Bar(
             x=pcts, y=names, orientation="h",
-            marker={"color": "#6366F1"},
+            marker={"color": ["#818CF8", "#A78BFA", "#C084FC", "#E879F9"]},
+            text=[f"{p:.1f}%" for p in pcts],
+            textposition="outside",
         ))
         fig2.update_layout(
-            height=300,
+            height=280,
             xaxis_title="Gain percent",
             paper_bgcolor="rgba(0,0,0,0)",
             plot_bgcolor="rgba(0,0,0,0)",
-            font={"color": "#E2E8F0"},
+            font={"color": "#CBD5E1"},
+            xaxis={"gridcolor": "#1A2540"},
+            yaxis={"gridcolor": "#1A2540"},
+            margin={"t": 10, "b": 10},
         )
         st.plotly_chart(fig2, use_container_width=True)
         st.caption(f"Trained on {importance['trained_on_count']} hand-labeled candidates using LightGBM lambdarank")
-    else:
-        st.info("No trained model found. Hand-set weights are being used.")

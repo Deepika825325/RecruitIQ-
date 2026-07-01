@@ -2,13 +2,16 @@
 from pathlib import Path
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
+DASHBOARD_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
+if str(DASHBOARD_ROOT) not in sys.path:
+    sys.path.insert(0, str(DASHBOARD_ROOT))
 
 import json
 import streamlit as st
 import plotly.graph_objects as go
-from dashboard.components.styles import apply_custom_style, page_header
+from components.styles import apply_custom_style, page_header, metric_row, section_header
 
 st.set_page_config(page_title="Funnel View", layout="wide")
 apply_custom_style()
@@ -26,35 +29,33 @@ else:
         y=["Total Candidates", "Stage A Survivors", "Final Shortlist"],
         x=[funnel["total_candidates"], funnel["stage_a_survivors"], funnel["final_shortlist"]],
         textinfo="value+percent initial",
-        marker={"color": ["#6366F1", "#8B5CF6", "#C084FC"]},
+        marker={"color": ["#4F46E5", "#7C3AED", "#A855F7"]},
+        connector={"line": {"color": "#1A2540", "width": 2}},
     ))
     fig.update_layout(
-        height=500,
+        height=480,
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        font={"color": "#E2E8F0"},
+        font={"color": "#CBD5E1", "family": "Inter"},
+        margin={"t": 20, "b": 20},
     )
     st.plotly_chart(fig, use_container_width=True)
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("Total Candidates", f"{funnel['total_candidates']:,}")
-    col2.metric(
-        "Stage A Survivors",
-        f"{funnel['stage_a_survivors']:,}",
-        f"{funnel['stage_a_survivors'] / funnel['total_candidates'] * 100:.2f}% of total",
-    )
-    col3.metric(
-        "Final Shortlist",
-        funnel["final_shortlist"],
-        f"{funnel['final_shortlist'] / funnel['stage_a_survivors'] * 100:.2f}% of survivors",
-    )
+    total = funnel["total_candidates"]
+    surv = funnel["stage_a_survivors"]
+    final = funnel["final_shortlist"]
+    metric_row([
+        ("Total Candidates", f"{total:,}"),
+        ("Stage A Survivors", f"{surv:,} ({surv/total*100:.2f}%)"),
+        ("Final Shortlist", f"{final} ({final/surv*100:.2f}%)"),
+    ])
 
     st.markdown("---")
+    section_header("How the Funnel Works")
     st.markdown(
-        """
-        Stage A applies hard filters and a title-tier check with a skills-based
-        rescue path for non-obvious titles. Stage B applies full weighted scoring
-        across title, skills, career evidence, structured fit, and a behavioral
-        availability multiplier.
-        """
+        "<div style='color:#94A3B8;line-height:1.8;'>Stage A applies hard filters: consulting-only career detection, "
+        "title-domain classification, and a skills-based rescue path for non-obvious titles. "
+        "Stage B applies full weighted scoring across title, skills evidence, career evidence, "
+        "structured fit, and a behavioral availability multiplier trained via LightGBM lambdarank.</div>",
+        unsafe_allow_html=True,
     )
